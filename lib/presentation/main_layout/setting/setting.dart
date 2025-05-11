@@ -14,9 +14,8 @@ class Setting extends StatelessWidget {
   Widget build(BuildContext context) {
     configProvider = Provider.of<ConfigProvider>(context);
 
-    String currentThemeString = configProvider.currentTheme == ThemeMode.dark
-        ? 'Dark'
-        : 'Light';
+    String currentThemeString =
+        configProvider.currentTheme == ThemeMode.dark ? 'Dark' : 'Light';
 
     return Scaffold(
       appBar: AppBar(
@@ -43,14 +42,18 @@ class Setting extends StatelessWidget {
               child: DropdownButton<String>(
                 underline: SizedBox(),
                 isExpanded: true,
-
+                iconSize: 30,
                 value: currentThemeString,
-                items: themeModeList.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+                items:
+                    themeModeList.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(value),
+                        ),
+                      );
+                    }).toList(),
                 onChanged: onThemeChange,
               ),
             ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../../../core/constant.dart';
 
@@ -49,88 +51,73 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              movie.imageUrl,
-              width: double.infinity,
-              height: 250,
-              fit: BoxFit.cover,
-            ),
+            movie.imageUrl.contains('/data/')
+                ? Image.file(File(movie.imageUrl), fit: BoxFit.cover)
+                : Image.asset(
+                  movie.imageUrl,
+                  width: double.infinity,
+                  height: 250,
+                  fit: BoxFit.cover,
+                ),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                movie.title,
-                style:  Theme.of(context).textTheme.bodyLarge
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                movie.description,
-                style:  Theme.of(context).textTheme.bodySmall,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  const Icon(Icons.star, color: Colors.yellow),
-                  const SizedBox(width: 5),
-                  Text(
-                    'IMDb',
-                    style:  Theme.of(context).textTheme.labelLarge
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    movie.title,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  const SizedBox(width: 5),
-                  Text(
-                    ratingText,
-                    style: Theme.of(context).textTheme.bodyMedium
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    movie.description,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.yellow),
+                      const SizedBox(width: 5),
+                      Text(
+                        'IMDb',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        ratingText,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: [
+                      Icon(
+                        movie.hasOscar ? Icons.star : Icons.star_border,
+                        color: movie.hasOscar ? Colors.yellow : Colors.grey,
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        movie.hasOscar
+                            ? 'حاصل على جائزة أوسكار'
+                            : 'لم يحصل على أوسكار',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
 
-
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                children: [
-                  Icon(
-                    movie.hasOscar ? Icons.star : Icons.star_border,
-                    color: movie.hasOscar ? Colors.yellow : Colors.grey,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    movie.hasOscar ? 'حاصل على جائزة أوسكار' : 'لم يحصل على أوسكار',
-                    style:  Theme.of(context).textTheme.bodySmall
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-            //
-            // Center(
-            //   child: ElevatedButton.icon(
-            //     onPressed: toggleFavorite,
-            //     icon: Icon(
-            //       isFavorite ? Icons.favorite : Icons.favorite_border,
-            //       color: Colors.white,
-            //     ),
-            //     label: Text(
-            //       isFavorite ? 'Remove from Favorites' : 'Add to Favorites',
-            //     ),
-            //     style: ElevatedButton.styleFrom(
-            //       backgroundColor: isFavorite ? Colors.red : Colors.blue,
-            //       padding: const EdgeInsets.symmetric(
-            //         horizontal: 24,
-            //         vertical: 12,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            const SizedBox(height: 20),
           ],
         ),
       ),
