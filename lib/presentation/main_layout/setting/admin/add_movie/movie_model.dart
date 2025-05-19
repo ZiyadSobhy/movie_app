@@ -34,8 +34,8 @@ class _MovieModelState extends State<MovieModel> {
     final configProvider = Provider.of<ConfigProvider>(context, listen: false);
     final title = titleController.text.trim();
     final desc = descriptionController.text.trim();
-    final ratingText = ratingController.text.trim();
-// try ensure this value is good to use
+    final ratingText = ratingController.text;
+    // try ensure this value is good to use
     double? rating = double.tryParse(ratingText);
     setState(() {
       ratingError = null;
@@ -63,9 +63,12 @@ class _MovieModelState extends State<MovieModel> {
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
+          backgroundColor: Theme.of(context).primaryColor,
+
           content: Text(
             "Please fill all fields and ensure the movie doesn't already exist.",
+            style: Theme.of(context).textTheme.displayLarge,
           ),
         ),
       );

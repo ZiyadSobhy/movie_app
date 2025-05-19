@@ -59,8 +59,8 @@ class _LoginAsAdminState extends State<LoginAsAdmin> {
 
   loginAsAdmin() {
     // Implement your login logic here
-    String username = usernameController.text;
-    String password = passwordController.text;
+    String username = usernameController.text; //admin
+    String password = passwordController.text; // 1234
 
     if (username == 'admin' && password == '1234') {
        Navigator.pushNamed(context, RouterManger.adminDashboard);

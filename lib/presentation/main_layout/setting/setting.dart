@@ -35,11 +35,16 @@ class Setting extends StatelessWidget {
             const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color:
+                    Theme.of(
+                      context,
+                    ).bottomNavigationBarTheme.selectedItemColor,
                 borderRadius: BorderRadius.circular(16),
               ),
 
               child: DropdownButton<String>(
+                icon: const Icon(Icons.arrow_drop_down ,color: Colors.white),
+               dropdownColor: Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
                 underline: SizedBox(),
                 isExpanded: true,
                 iconSize: 30,
@@ -50,7 +55,10 @@ class Setting extends StatelessWidget {
                         value: value,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(value),
+                          child: Text(
+                            value,
+                            style: Theme.of(context).textTheme.displayLarge,
+                          ),
                         ),
                       );
                     }).toList(),

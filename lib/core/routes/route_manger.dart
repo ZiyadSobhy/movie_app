@@ -6,7 +6,6 @@ import '../../presentation/main_layout/favorites_page/favorites_page.dart';
 import '../../presentation/main_layout/main_layout.dart';
 import '../../presentation/main_layout/movie_details_page/movie_details_page.dart';
 import '../../presentation/main_layout/search_page/search_page.dart';
-import '../../presentation/main_layout/setting/admin/add_movie/add_movie.dart';
 import '../../presentation/main_layout/setting/admin/add_movie/movie_model.dart';
 import '../../presentation/main_layout/setting/admin/admin_dashboard.dart';
 import '../../presentation/main_layout/setting/admin/login_as_admin.dart';
@@ -45,8 +44,7 @@ class RouterManger {
           return MaterialPageRoute(builder: (_) => LoginAsAdmin());
       case adminDashboard:
         return MaterialPageRoute(builder: (_) =>  AdminDashboard());
-        case addMovie:
-        return MaterialPageRoute(builder: (_) =>  const AddMovie());
+
         case movieModel:
           return MaterialPageRoute(builder: (_) =>   MovieModel());
       default:

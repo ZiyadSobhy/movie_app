@@ -21,7 +21,7 @@ class AdminDashboard extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: ()  {
-          Navigator.pushNamed(context, RouterManger.addMovie);
+          Navigator.pushNamed(context, RouterManger.movieModel);
         },
         child: const Icon(Icons.add),
       ),

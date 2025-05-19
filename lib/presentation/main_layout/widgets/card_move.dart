@@ -33,6 +33,7 @@ class _CardMoveState extends State<CardMove> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child:
+                  // Unable to load asset: "/data/user/0/com.example.movie_app/cache/..."
                   widget.movieDm.imageUrl.contains("/data/")
                       ? Image.file(
                         File(widget.movieDm.imageUrl),

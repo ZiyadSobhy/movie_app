@@ -13,7 +13,7 @@ class AllMoviesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('All Movies'),
-        automaticallyImplyLeading: false,
+         automaticallyImplyLeading: false,
       ),
       body: ListView.builder(
         itemCount: movie.length,

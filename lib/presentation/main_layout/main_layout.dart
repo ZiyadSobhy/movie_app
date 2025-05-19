@@ -19,7 +19,7 @@ class _MainLayoutState extends State<MainLayout> {
   Widget build(BuildContext context) {
     List<Widget> pages = [
       AllMoviesPage(),
-      const FavoritesPage(),
+      FavoritesPage(),
       SearchPage(),
       Setting(),
     ];
