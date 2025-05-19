@@ -35,7 +35,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   @override
   Widget build(BuildContext context) {
     String ratingText =
-        movie.rating == 0.0 ? 'No Ratting' : movie.rating.toStringAsFixed(1);
+        movie.rating == 0.0 ? 'No Ratting' : movie.rating.toString();
 
     return Scaffold(
       appBar: AppBar(

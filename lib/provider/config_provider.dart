@@ -28,5 +28,13 @@ bool get isDarkMode => currentTheme == ThemeMode.dark;
     currentTheme = newTheme;
     notifyListeners();
   }
+  bool isNotExistMovie(String title) {
+    for(int i=0;i<movies.length;i++){
+      if(movies[i].title==title){
+        return false;
+      }
+    }
+    return true;
+  }
 
 }

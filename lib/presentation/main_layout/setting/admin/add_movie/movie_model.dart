@@ -14,123 +14,118 @@ class MovieModel extends StatefulWidget {
 }
 
 class _MovieModelState extends State<MovieModel> {
-  File? _imageFile;
+  final titleController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final ratingController = TextEditingController();
+  File? imageFile;
   final picker = ImagePicker();
+  String? ratingError;
 
-  void _showAddMovieBottomSheet(BuildContext context) {
-    final titleController = TextEditingController();
-    final descriptionController = TextEditingController();
-    final ratingController = TextEditingController();
+  void pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
+  }
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (ctx) {
-        return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(ctx).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 20,
+  void submitForm() {
+    final configProvider = Provider.of<ConfigProvider>(context, listen: false);
+    final title = titleController.text.trim();
+    final desc = descriptionController.text.trim();
+    final ratingText = ratingController.text.trim();
+// try ensure this value is good to use
+    double? rating = double.tryParse(ratingText);
+    setState(() {
+      ratingError = null;
+    });
+
+    if (rating == null || rating > 10 || rating < 0) {
+      setState(() {
+        ratingError = "Rating must be a number between 0 and 10";
+      });
+      return;
+    }
+
+    if (title.isNotEmpty &&
+        desc.isNotEmpty &&
+        configProvider.isNotExistMovie(title)) {
+      configProvider.addMovie(
+        MovieDm(
+          title: title,
+          description: desc,
+          rating: rating,
+          imageUrl: imageFile?.path ?? AssetsManger.inception,
+          hasOscar: configProvider.hasOscar,
+        ),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            "Please fill all fields and ensure the movie doesn't already exist.",
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Add New Movie",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: titleController,
-                  decoration: const InputDecoration(labelText: "Title"),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(labelText: "Description"),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: ratingController,
-                  decoration: const InputDecoration(labelText: "Rating"),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Consumer<ConfigProvider>(
-                      builder: (context, configProvider, _) {
-                        return Checkbox(
-                          value: configProvider.hasOscar,
-                          onChanged: configProvider.toggleOscar,
-                        );
-                      },
-                    ),
-                    Text(
-                      "Has Oscar",
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ],
-                ),
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    final pickedFile = await picker.pickImage(
-                      source: ImageSource.gallery,
-                    );
-                    if (pickedFile != null) {
-                      setState(() {
-                        _imageFile = File(pickedFile.path);
-                      });
-                    }
-                  },
-                  icon: const Icon(Icons.image),
-                  label: const Text("Pick Image"),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    final configProvider =
-                    Provider.of<ConfigProvider>(context, listen: false);
-
-                    final title = titleController.text.trim();
-                    final desc = descriptionController.text.trim();
-                    final rating =
-                        double.tryParse(ratingController.text) ?? 0.0;
-
-                    if (title.isNotEmpty && desc.isNotEmpty) {
-                      configProvider.addMovie(
-                        MovieDm(
-                          id: DateTime.now().toString(),
-                          title: title,
-                          description: desc,
-                          rating: rating,
-                          imageUrl: _imageFile?.path ??
-                              AssetsManger.inception, // default image
-                          hasOscar: configProvider.hasOscar,
-                        ),
-                      );
-                      Navigator.pop(ctx);
-                      _imageFile = null;
-                    }
-                  },
-                  child: const Text("Add Movie"),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () => _showAddMovieBottomSheet(context),
-        child: const Text("Add Movie (Admin)"),
+    final configProvider = Provider.of<ConfigProvider>(context);
+    return Scaffold(
+      appBar: AppBar(title: const Text("Add New Movie")),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: titleController,
+                decoration: const InputDecoration(labelText: "Title"),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: descriptionController,
+                decoration: const InputDecoration(labelText: "Description"),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: ratingController,
+                decoration: InputDecoration(
+                  labelText: "Rating",
+                  errorText: ratingError,
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Checkbox(
+                    value: configProvider.hasOscar,
+                    onChanged: (value) => configProvider.toggleOscar(value),
+                  ),
+                  Text(
+                    "Has Oscar",
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                ],
+              ),
+              ElevatedButton.icon(
+                onPressed: pickImage,
+                icon: const Icon(Icons.image),
+                label: const Text("Pick Image"),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: submitForm,
+                child: const Text("Add Movie"),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

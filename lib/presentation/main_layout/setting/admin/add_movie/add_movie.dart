@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'movie_model.dart';
+import '../../../../../core/routes/route_manger.dart';
 
 class AddMovie extends StatelessWidget {
   const AddMovie({super.key});
@@ -17,7 +17,11 @@ class AddMovie extends StatelessWidget {
           },
         ),
       ),
-      body: MovieModel(),
+      body: Center(
+        child: ElevatedButton(onPressed: (){
+          Navigator.pushNamed(context, RouterManger.movieModel);
+        }, child: Text('Add Movie')),
+      )
     );
   }
 }
